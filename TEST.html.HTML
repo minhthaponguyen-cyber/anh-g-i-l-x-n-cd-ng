@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Lì xì Tết tặng Ngọc Ánh 💖</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  width:100vw;height:100vh;overflow:hidden;
+  background:radial-gradient(circle at top,#8b0000,#120000);
+  font-family:system-ui;
+}
+
+/* ===== HOA MAI / ĐÀO ===== */
+.flower{
+  position:fixed;top:-40px;font-size:22px;
+  animation:fall linear infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+
+/* ===== PHÁO HOA ===== */
+.firework{
+  position:fixed;
+  width:6px;height:6px;
+  border-radius:50%;
+  background:gold;
+  animation:burst 1.2s ease-out forwards;
+  pointer-events:none;
+  z-index:2;
+}
+@keyframes burst{
+  to{transform:scale(6);opacity:0}
+}
+
+/* ===== BAO LÌ XÌ ===== */
+.envelope{
+  position:absolute;left:50%;top:60%;
+  width:240px;height:170px;
+  transform:translate(-50%,-50%);
+  background:linear-gradient(135deg,#b80000,#ff2e2e);
+  border-radius:20px;
+  box-shadow:0 0 50px gold;
+  cursor:pointer;
+  transition:1s;
+  z-index:5;
+}
+.envelope::before{
+  content:"福";
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:70px;color:gold;
+}
+.lid{
+  position:absolute;inset:0;
+  background:#ff4444;
+  clip-path:polygon(0 0,100% 0,50% 55%);
+  transform-origin:top;
+  transition:.8s;
+}
+.envelope.open{
+  opacity:0;
+  transform:translate(-50%,-45%) scale(.85);
+}
+.envelope.open .lid{
+  transform:rotateX(180deg);
+}
+
+/* ===== SCENE ===== */
+.scene{
+  position:absolute;left:50%;top:55%;
+  width:700px;height:500px;
+  transform:translate(-50%,-50%);
+  z-index:1;
+}
+
+/* ===== TEXT LAYER ===== */
+.text-layer{
+  position:absolute;left:50%;top:55%;
+  width:700px;height:500px;
+  transform:translate(-50%,-50%);
+  z-index:20;
+  pointer-events:none;
+  text-align:center;
+}
+
+/* CHỮ CHÚC */
+.wish{
+  position:absolute;
+  top:45%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:26px;
+  font-weight:700;
+  color:#ffd966;
+  text-shadow:0 0 30px gold;
+  line-height:1.6;
+  opacity:0;
+  transition:1s;
+}
+.wish.show{opacity:1}
+
+/* CHỮ GIỮA TIM + CUỐI */
+.final-text{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:44px;
+  font-weight:900;
+  color:#ffd1dc;
+  text-shadow:0 0 50px #ff5c8a;
+  opacity:0;
+}
+.final-text.show{
+  opacity:1;
+  animation:pulse 1.6s infinite;
+}
+@keyframes pulse{
+  50%{transform:translate(-50%,-50%) scale(1.1)}
+}
+
+/* ===== CÁ ===== */
+.fish{
+  position:absolute;width:26px;height:14px;
+  transition:1.6s cubic-bezier(.2,.8,.2,1);
+}
+.body{
+  position:absolute;width:18px;height:10px;
+  background:linear-gradient(135deg,#8be9fd,#38bdf8);
+  border-radius:10px;left:7px;top:2px;
+}
+.eye{
+  position:absolute;width:3px;height:3px;
+  background:#000;border-radius:50%;
+  right:4px;top:5px;
+}
+.tail{
+  position:absolute;left:0;top:4px;
+  width:0;height:0;
+  border-top:4px solid transparent;
+  border-bottom:4px solid transparent;
+  border-right:6px solid #38bdf8;
+  animation:tail .5s infinite alternate;
+}
+@keyframes tail{to{transform:rotate(20deg)}}
+
+.pink .body{
+  background:linear-gradient(135deg,#ffb3c1,#ff5c8a);
+  box-shadow:0 0 18px #ff5c8a;
+}
+.gold .body{
+  background:linear-gradient(135deg,#ffe066,#ffb703);
+  box-shadow:0 0 22px gold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 NHẠC TẾT -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/12/20/audio_6f0e3c0f4a.mp3" type="audio/mpeg">
+</audio>
+
+<div class="envelope" id="env"><div class="lid"></div></div>
+<div class="scene" id="scene"></div>
+
+<div class="text-layer">
+  <div class="wish" id="wish">
+    Chúc em một năm mới<br>
+    Luôn xinh đẹp, hạnh phúc<br>
+    Và lúc nào cũng cười thật tươi 💕
+  </div>
+
+  <div class="final-text" id="loveText">ANH YÊU NGỌC ÁNH cte phô mai que ❤️</div>
+  <div class="final-text" id="finalText">Chúc em có một cái Tết thật ấm áp 💖</div>
+</div>
+
+<script>
+/* HOA RƠI */
+["🌸","🌼"].forEach(sym=>{
+  for(let i=0;i<10;i++){
+    const f=document.createElement("div");
+    f.className="flower";
+    f.textContent=sym;
+    f.style.left=Math.random()*100+"vw";
+    f.style.animationDuration=10+Math.random()*10+"s";
+    document.body.appendChild(f);
+  }
+});
+
+const env=document.getElementById("env");
+const scene=document.getElementById("scene");
+const wish=document.getElementById("wish");
+const loveText=document.getElementById("loveText");
+const finalText=document.getElementById("finalText");
+const music=document.getElementById("music");
+
+const fishes=[];
+let state=0;
+
+/* TẠO CÁ */
+function createFishes(){
+  for(let i=0;i<90;i++){
+    const f=document.createElement("div");
+    f.className="fish";
+    f.innerHTML='<div class="tail"></div><div class="body"></div><div class="eye"></div>';
+    scene.appendChild(f);
+    fishes.push({
+      el:f,
+      a:Math.random()*6.28,
+      r:120+Math.random()*160,
+      j:(Math.random()-0.5)*4,
+      s:0.002+Math.random()*0.002
+    });
+  }
+}
+
+/* BƠI */
+function animate(){
+  if(state===1){
+    fishes.forEach(f=>{
+      f.a+=f.s;
+      f.el.style.transform=
+        `translate(${350+Math.cos(f.a)*f.r+f.j}px,
+                   ${250+Math.sin(f.a)*f.r*0.55+f.j}px)`;
+    });
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* TIM */
+function formHeart(){
+  const cx=350,cy=250;
+  fishes.forEach((f,i)=>{
+    const t=i/fishes.length*Math.PI*2;
+    const ring=i%2?0.92:1;
+    const x=16*Math.sin(t)**3;
+    const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t);
+    f.el.style.transform=
+      `translate(${cx+x*11*ring}px,${cy-y*11*ring}px)`;
+    f.el.classList.add("pink");
+  });
+}
+
+/* PHÁO HOA */
+function firework(){
+  for(let i=0;i<6;i++){
+    const fw=document.createElement("div");
+    fw.className="firework";
+    fw.style.left=40+Math.random()*20+"vw";
+    fw.style.top=20+Math.random()*20+"vh";
+    document.body.appendChild(fw);
+    setTimeout(()=>fw.remove(),1200);
+  }
+}
+
+/* CLICK */
+addEventListener("click",()=>{
+  if(state===0){
+    music.play().catch(()=>{});
+    env.classList.add("open");
+    createFishes();
+    wish.classList.add("show");
+    state=1;
+  }
+  else if(state===1){
+    wish.classList.remove("show");
+    formHeart();
+    loveText.classList.add("show");
+    firework();
+    state=2;
+  }
+  else if(state===2){
+    loveText.classList.remove("show");
+    fishes.forEach(f=>{
+      f.el.classList.remove("pink");
+      f.el.classList.add("gold");
+    });
+    finalText.classList.add("show");
+    firework();
+    state=3;
+  }
+});
+</script>
+
+</body>
+</html>
